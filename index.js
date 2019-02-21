@@ -49,9 +49,9 @@ app.post('/adduser', (req,res) => {
 
 app.get('/signin/:username/:password',(req,res)=>{
     var sql = `select * from tableuser where 
-    username = '${req.params.username}' and password = '${req.params.password}'`
+    username like '%${req.params.username}%' and password like '%${req.params.password}%'`
     conn.query(sql, (err,result)=>{
-        if(err) throw err
+        if(err) throw console.log(err)
         res.send('Anda berhasil Masuk')
     }) 
 })
@@ -62,7 +62,7 @@ app.get('/getkamarlist/:namacategory',(req,res) => {
     tc.id as idCategory, tk.harga, 
     tc.namacategory as namaCategory  
     from tablekamar tk join tablecategory tc on tc.id = tk.categoryid
-    where tc.namacategory = '${req.params.namacategory}'`
+    where tc.namacategory like '%${req.params.namacategory}%'`
     
     conn.query(sql, (err, result) => {
         if (err) throw err; 
