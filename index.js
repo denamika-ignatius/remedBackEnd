@@ -49,7 +49,7 @@ app.post('/adduser', (req,res) => {
 
 app.get('/signin/:username/:password',(req,res)=>{
     var sql = `select * from tableuser where 
-    username = ${req.params.username} && password = ${req.params.password}`
+    username = '${req.params.username}' and password = '${req.params.password}'`
     conn.query(sql, (err,result)=>{
         if(err) throw err
         res.send('Anda berhasil Masuk')
@@ -57,15 +57,13 @@ app.get('/signin/:username/:password',(req,res)=>{
 })
 
 // -------------------------------- get kamar by Nama Category ------------- 
-app.post('/getkamarlist',(req,res) => {
-    /*var sql = `select tk.id as Id, tk.nomorkamar as nomor kamar,
-    tk.categoryid as id category, tk.harga as harga, 
-    tc.id ,tc.namacategory as nama category  
-    from tablekamar tk join tablecategory tc on tk.categoryid = tc.id
-    where tc.namacategory = ${req.params.namacategory}`*/
+app.get('/getkamarlist/:namacategory',(req,res) => {
+    var sql = `select tk.id as Id, tk.nomorkamar as nomorKamar,
+    tc.id as idCategory, tk.harga, 
+    tc.namacategory as namaCategory  
+    from tablekamar tk join tablecategory tc on tc.id = tk.categoryid
+    where tc.namacategory = '${req.params.namacategory}'`
     
-    var sql = `SELECT * FROM tablekamar`;
-
     conn.query(sql, (err, result) => {
         if (err) throw err; 
         res.send(result);
