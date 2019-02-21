@@ -57,17 +57,27 @@ app.get('/signin/:username/:password',(req,res)=>{
 })
 
 // -------------------------------- get kamar by Nama Category ------------- 
-app.get('/getkamarlist/:namacategory',(req,res) => {
+app.get('/getkamarlist/:category?',(req,res) => {
+    if(req.params.category == undefined || req.params.category === null){
+        req.params.category = undefined;
+        var sql =  `select tk.id as Id, tk.nomorkamar as nomorKamar,
+        tc.id as idCategory, tk.harga, 
+        tc.namacategory as namaCategory  
+        from tablekamar tk join tablecategory tc on tc.id = tk.categoryid`
+    }
     var sql = `select tk.id as Id, tk.nomorkamar as nomorKamar,
     tc.id as idCategory, tk.harga, 
     tc.namacategory as namaCategory  
     from tablekamar tk join tablecategory tc on tc.id = tk.categoryid
-    where tc.namacategory like '%${req.params.namacategory}%'`
+    where tc.namacategory = '${req.params.category}'`;
+    console.log(req.params.namacategory)
     
     conn.query(sql, (err, result) => {
         if (err) throw err; 
         res.send(result);
+        
     })
+    
 })
 
 // -------------------------------- add Kamar -------------------------
