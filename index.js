@@ -47,7 +47,7 @@ app.post('/adduser', (req,res) => {
 
 // ------------------------------- SignIn User -----------------------------
 
-app.get('/signin/:username/:password',(req,res)=>{
+app.get('/signin/:username',(req,res)=>{
     var sql = `select * from tableuser where 
     username like '%${req.params.username}%' and password like '%${req.params.password}%'`
     conn.query(sql, (err,result)=>{
@@ -57,8 +57,9 @@ app.get('/signin/:username/:password',(req,res)=>{
 })
 
 // -------------------------------- get kamar by Nama Category ------------- 
-app.get('/getkamarlist/:category?',(req,res) => {
-    if(req.params.category == undefined || req.params.category === null){
+app.get('/getkamarlist/:category',(req,res) => {
+    console.log(req.params.category)
+    if(req.params.category == undefined || req.params.category == null){
         req.params.category = undefined;
         var sql =  `select tk.id as Id, tk.nomorkamar as nomorKamar,
         tc.id as idCategory, tk.harga, 
@@ -70,7 +71,6 @@ app.get('/getkamarlist/:category?',(req,res) => {
     tc.namacategory as namaCategory  
     from tablekamar tk join tablecategory tc on tc.id = tk.categoryid
     where tc.namacategory = '${req.params.category}'`;
-    console.log(req.params.namacategory)
     
     conn.query(sql, (err, result) => {
         if (err) throw err; 
